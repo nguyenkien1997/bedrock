@@ -65,8 +65,10 @@ const handleError = task => {
 };
 
 const bundleCssFiles = bundle => {
-    log.info(`Building CSS bundle: ${bundle.name}`);
     let bundleFilename = `css/BUNDLES/${bundle.name}.css`;
+    if (global.watching) {
+        log.info(`building: ${bundleFilename}`);
+    }
     let cssFiles = bundle.files.map(fileName => {
         if (!fileName.endsWith('.css')) {
             return fileName.replace(/\.(less|scss)$/i, '.css');
@@ -79,8 +81,10 @@ const bundleCssFiles = bundle => {
 };
 
 const bundleJsFiles = bundle => {
-    log.info(`Building JS bundle: ${bundle.name}`);
     let bundleFilename = `js/BUNDLES/${bundle.name}.js`;
+    if (global.watching) {
+        log.info(`building: ${bundleFilename}`);
+    }
     return gulp.src(bundle.files, {base: buildDir, cwd: buildDir})
         .pipe(gulpif(!production, sourcemaps.init()))
         .pipe(concat(bundleFilename))
