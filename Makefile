@@ -10,13 +10,15 @@ help:
 	@echo "build         - build docker images for dev"
 	@echo "run           - docker-compose up the entire system for dev"
 	@echo ""
+	@echo "shell         - start the Django Python shell (bpython and shell_plus)"
 	@echo "clean         - remove all build, test, coverage and Python artifacts"
 	@echo "rebuild       - force a rebuild of all of the docker images"
-	@echo "lint          - check style with flake8"
+	@echo "lint          - check style with flake8, jshint, and stylelint"
 	@echo "test          - run tests against local files"
 	@echo "test-image    - run tests against files in docker image"
-	@echo "test-smoketest- run smoke tests against SERVER_URL"
-	@echo "docs          - generate Sphinx HTML documentation, including API docs"
+	@echo "docs          - generate Sphinx HTML documentation"
+	@echo "build-ci      - build docker images for use in our CI pipeline"
+	@echo "test-ci       - run tests against files in docker image built by CI"
 
 .env:
 	@if [ ! -f .env ]; then \
@@ -31,7 +33,7 @@ build: .env
 	docker/bin/build_images.sh
 	touch .docker-build
 
-rebuild: clean .docker-build
+rebuild: clean build
 
 run: .docker-build
 	${DC} up assets app
