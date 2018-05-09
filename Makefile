@@ -1,4 +1,5 @@
-DOCKERCOMPOSE = "bin/docker-compose.sh"
+DC_DEPLOY = "bin/docker-compose.sh"
+DC = $(shell which docker-compose)
 
 default: help
 	@echo ""
@@ -27,16 +28,16 @@ help:
 	${MAKE} build
 
 build: .env
-	docker/bin/build_images.sh
+	docker/bin/build_images.sh --local
 	touch .docker-build
 
 rebuild: clean .docker-build
 
 run: .docker-build
-	${DOCKERCOMPOSE} up assets app
+	${DC} up assets app
 
 shell: .docker-build
-	${DOCKERCOMPOSE} run app python manage.py shell_plus
+	${DC} run app python manage.py shell_plus
 
 clean:
 	# python related things
@@ -53,17 +54,23 @@ clean:
 	-rm -f .docker-build
 
 lint: .docker-build
-	${DOCKERCOMPOSE} run test flake8 bedrock lib tests
-	${DOCKERCOMPOSE} run assets gulp js:lint css:lint
+	${DC} run test flake8 bedrock lib tests
+	${DC} run assets gulp js:lint css:lint
 
 test: .docker-build
-	${DOCKERCOMPOSE} run test
+	${DC} run test
 
 test-image: .docker-build
-	${DOCKERCOMPOSE} run test-image
+	${DC} run test-image
 
 docs: .docker-build
-	${DOCKERCOMPOSE} run app $(MAKE) -C docs/ clean
-	${DOCKERCOMPOSE} run app $(MAKE) -C docs/ html
+	${DC} run app $(MAKE) -C docs/ clean
+	${DC} run app $(MAKE) -C docs/ html
 
-.PHONY: default clean build docs lint run shell test test-image test-smoketest restore-db rebuild
+build-deploy:
+	docker/bin/build_images.sh
+
+test-deploy:
+	${DC_DEPLOY} run test-image
+
+.PHONY: default clean build docs lint run shell test test-image test-smoketest restore-db rebuild build-deploy test-deploy

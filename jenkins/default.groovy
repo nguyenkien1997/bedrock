@@ -12,7 +12,7 @@ stage ('Build Images') {
     utils.ircNotification([stage: 'Test & Deploy', status: 'starting'])
     lock ("bedrock-docker-${env.GIT_COMMIT}") {
         try {
-            sh "make clean build"
+            sh "make clean build-deploy"
         } catch(err) {
             utils.ircNotification([stage: 'Docker Build', status: 'failure'])
             throw err
@@ -29,7 +29,7 @@ if ( config.smoke_tests ) {
                 unit_tests: {
                     node {
                         unstash 'workspace'
-                        sh 'make test-image'
+                        sh 'make test-deploy'
                     }
                 },
             ])

@@ -10,9 +10,11 @@ GIT_COMMIT= docker-compose pull release app assets
 git submodule sync
 git submodule update --init --recursive
 
-# set all of the GIT environment variables
-source docker/bin/set_git_env_vars.sh
-
-# build fresh based on local changes
-docker-compose build release
-docker-compose build app assets
+if [[ "$1" == "--local" ]]; then
+    docker-compose build app assets
+else
+    # set all of the GIT environment variables
+    source docker/bin/set_git_env_vars.sh
+    docker-compose build release
+    docker-compose build app assets
+fi
