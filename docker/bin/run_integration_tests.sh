@@ -50,7 +50,7 @@ BIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $BIN_DIR/set_git_env_vars.sh
 
 if [ -z "${BASE_URL}" ]; then
-  DOCKER_TAG="${BRANCH_NAME_SAFE}-${GIT_COMMIT}"
+  DOCKER_TAG="${BRANCH_AND_COMMIT}"
   # start bedrock
   docker run -d --rm \
     --name bedrock-code-${GIT_COMMIT_SHORT} \

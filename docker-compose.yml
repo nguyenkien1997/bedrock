@@ -9,14 +9,14 @@ services:
     build:
       context: .
       target: assets
-    image: mozorg/bedrock_assets:latest
+    image: mozorg/bedrock_assets:${GIT_COMMIT:-latest}
     command: npm run docker-start
     ports:
       - "3000:3000"
       - "3001:3001"
     volumes:
-      - ./media/:/app/media:cached
-      - ./bedrock/:/app/bedrock:cached
+      - ./media/:/app/media:delegated
+      - ./bedrock/:/app/bedrock:delegated
     environment:
       BS_PROXY_URL: "app:8000"
       BS_OPEN_BROWSER: "false"
@@ -27,41 +27,41 @@ services:
       context: .
       target: devapp
       args:
-        GIT_SHA: ${GIT_SHA:-latest}
+        GIT_SHA: ${GIT_COMMIT:-latest}
         BRANCH_NAME: ${BRANCH_NAME:-latest}
-    image: mozorg/bedrock_test:latest
+    image: mozorg/bedrock_test:${GIT_COMMIT:-latest}
     command: python manage.py runserver 0.0.0.0:8000
     env_file: .env
     ports:
       - "8000:8000"
     volumes:
-      - ./bedrock/:/app/bedrock:cached
-      - ./bin/:/app/bin:cached
-      - ./docker/:/app/docker:cached
-      - ./etc/:/app/etc:cached
-      - ./lib/:/app/lib:cached
-      - ./media/:/app/media:cached
-      - ./root_files/:/app/root_files:cached
-      - ./scripts/:/app/scripts:cached
-      - ./vendor-local/:/app/vendor-local:cached
-      - ./wsgi/:/app/wsgi:cached
+      - ./bedrock/:/app/bedrock:delegated
+      - ./bin/:/app/bin:delegated
+      - ./docker/:/app/docker:delegated
+      - ./etc/:/app/etc:delegated
+      - ./lib/:/app/lib:delegated
+      - ./media/:/app/media:delegated
+      - ./root_files/:/app/root_files:delegated
+      - ./scripts/:/app/scripts:delegated
+      - ./vendor-local/:/app/vendor-local:delegated
+      - ./wsgi/:/app/wsgi:delegated
 
   # run the tests against local changes
   test:
-    image: mozorg/bedrock_test:latest
+    image: mozorg/bedrock_test:${GIT_COMMIT:-latest}
     env_file: docker/envfiles/test.env
     volumes:
-      - ./bedrock/:/app/bedrock:cached
-      - ./bin/:/app/bin:cached
-      - ./docker/:/app/docker:cached
-      - ./etc/:/app/etc:cached
-      - ./lib/:/app/lib:cached
-      - ./media/:/app/media:cached
-      - ./root_files/:/app/root_files:cached
-      - ./scripts/:/app/scripts:cached
-      - ./test/:/app/test:cached
-      - ./vendor-local/:/app/vendor-local:cached
-      - ./wsgi/:/app/wsgi:cached
+      - ./bedrock/:/app/bedrock:delegated
+      - ./bin/:/app/bin:delegated
+      - ./docker/:/app/docker:delegated
+      - ./etc/:/app/etc:delegated
+      - ./lib/:/app/lib:delegated
+      - ./media/:/app/media:delegated
+      - ./root_files/:/app/root_files:delegated
+      - ./scripts/:/app/scripts:delegated
+      - ./test/:/app/test:delegated
+      - ./vendor-local/:/app/vendor-local:delegated
+      - ./wsgi/:/app/wsgi:delegated
 
   # run tests with no volumes
   test-image:
@@ -74,6 +74,6 @@ services:
       context: .
       target: webapp
       args:
-        GIT_SHA: ${GIT_SHA:-latest}
+        GIT_SHA: ${GIT_COMMIT:-latest}
         BRANCH_NAME: ${BRANCH_NAME:-latest}
-    image: mozorg/bedrock:latest
+    image: mozorg/bedrock:${BRANCH_AND_COMMIT:-latest}

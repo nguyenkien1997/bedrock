@@ -22,7 +22,7 @@ const karma = require('karma');
 const eslint = require('gulp-eslint');
 const gulpStylelint = require('gulp-stylelint');
 const argv = require('yargs').argv;
-const browserSync = require('browser-sync');
+const browserSync = require('browser-sync').create();
 const merge = require('merge-stream');
 const staticBundles = require('./static-bundles.json');
 
@@ -310,9 +310,12 @@ gulp.task('all:watch', ['js:compile', 'css:compile'], () => {
 gulp.task('browser-sync', ['all:watch'], () => {
     const proxyURL = process.env.BS_PROXY_URL || 'localhost:8000';
     const openBrowser = !(process.env.BS_OPEN_BROWSER === 'false');
-    return browserSync({
+    return browserSync.init({
         proxy: proxyURL,
         open: openBrowser,
+        reloadDelay: 2000,
+        reloadDebounce: 2000,
+        injectChanges: false,
         serveStatic: [{
             route: '/media',
             dir: buildDir
