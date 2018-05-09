@@ -31,16 +31,36 @@ Docker Installation
 This is the simplest way to get started developing for bedrock. If you're on Linux or Mac (and possibly Windows 10 with the
 Linux subsystem) you can run a script that will pull our production docker images and use those to build developer ones::
 
-    $ make build
-
-Then you can start the server with::
-
+    $ make clean
     $ make run
+
+.. note::
+
+    You can start the server any other time with::
+
+        $ make run
 
 You should see a number of things happeneing, but when it's done it will output something saying that the server is running
 at `localhost:3000 <http://localhost:3000/>`_. Go to that URL in a browser and you should see the mozilla.org home page.
 In this mode the site will refresh itself when you make changes to any template or media file. Simply open your editor of
 choice and modify things and you should see those changes reflected in your browser.
+
+If you don't have or want to use Make you can call the docker and compose commands directly::
+
+    $ docker pull mozorg/bedrock:latest
+    $ docker pull mozorg/bedrock_test:latest
+    $ docker pull mozorg/bedrock_assets:latest
+    $ git submodule sync
+    $ git submodule update --init --recursive
+    $ docker-compose build release
+    $ docker-compose build app assets
+
+Then starting it all is simply::
+
+    $ docker-compose up app assets
+
+All of the building is handled by the ``docker/bin/build_images.sh`` script and called by Make if you follow the above directions.
+You **DO NOT** need to do both.
 
 Local Installation
 ------------------
@@ -98,9 +118,11 @@ you've broken something with a change.
 Docker
 ------
 
-We manage our local docker environment with docker-compose. All you need to do here is run::
+We manage our local docker environment with docker-compose and Make. All you need to do here is run::
 
     $ make test
+
+If you don't have Make you can simply run ``docker-compose run test``.
 
 Local
 -----
@@ -131,14 +153,7 @@ Docker
 
 You can simply run the ``make run`` script mentioned above, or use docker-compose directly::
 
-    $ bin/docker-compose.sh up app assets
-
-
-.. note::
-
-    We say to use our wrapper script (``bin/docker-compose.sh``) for docker-compose because it sets some extra
-    environment variables (mostly for git hashes, branches, etc.) that the docker-compose.yml can use, but you
-    can also just use ``docker-compose`` directly if you'd like. The wrapper is mostly for deployment.
+    $ docker-compose up app assets
 
 Local
 -----
