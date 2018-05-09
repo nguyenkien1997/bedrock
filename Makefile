@@ -1,4 +1,4 @@
-DC_DEPLOY = "bin/docker-compose.sh"
+DC_CI = "bin/docker-compose.sh"
 DC = $(shell which docker-compose)
 
 default: help
@@ -28,7 +28,7 @@ help:
 	${MAKE} build
 
 build: .env
-	docker/bin/build_images.sh --local
+	docker/bin/build_images.sh
 	touch .docker-build
 
 rebuild: clean .docker-build
@@ -67,10 +67,10 @@ docs: .docker-build
 	${DC} run app $(MAKE) -C docs/ clean
 	${DC} run app $(MAKE) -C docs/ html
 
-build-deploy:
-	docker/bin/build_images.sh
+build-ci: clean
+	docker/bin/build_images.sh --ci
 
-test-deploy:
-	${DC_DEPLOY} run test-image
+test-ci:
+	${DC_CI} run test-image
 
-.PHONY: default clean build docs lint run shell test test-image test-smoketest restore-db rebuild build-deploy test-deploy
+.PHONY: default clean build docs lint run shell test test-image test-smoketest restore-db rebuild build-ci test-ci

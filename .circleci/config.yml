@@ -9,8 +9,8 @@ jobs:
       - run:
           name: Python Tests
           command: |
-            make clean build
-            make test-image
+            make build-ci
+            make test-ci
 
   test_js:
     docker:
