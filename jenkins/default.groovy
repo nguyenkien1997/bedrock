@@ -28,7 +28,7 @@ if ( config.smoke_tests ) {
                 smoke_tests: utils.integrationTestJob('smoke'),
                 unit_tests: {
                     node {
-                        unstash 'scripts'
+                        unstash 'workspace'
                         sh 'make test-image'
                     }
                 },

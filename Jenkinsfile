@@ -51,8 +51,6 @@ node {
     stage ('Prepare') {
         checkout scm
         // save the files for later
-        stash name: 'scripts', includes: 'bin/,docker/'
-        stash name: 'tests', includes: 'tests/,requirements/'
         stash 'workspace'
     }
     loadBranch(env.BRANCH_NAME)
