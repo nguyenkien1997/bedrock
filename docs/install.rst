@@ -47,9 +47,7 @@ choice and modify things and you should see those changes reflected in your brow
 
 If you don't have or want to use Make you can call the docker and compose commands directly::
 
-    $ docker pull mozorg/bedrock:latest
-    $ docker pull mozorg/bedrock_test:latest
-    $ docker pull mozorg/bedrock_assets:latest
+    $ docker-compose pull release app assets
     $ git submodule sync
     $ git submodule update --init --recursive
     $ docker-compose build release

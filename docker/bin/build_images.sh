@@ -2,17 +2,16 @@
 
 set -exo pipefail
 
-# set all of the GIT environment variables
-source docker/bin/set_git_env_vars.sh
-
-# pull latest images
-docker pull mozorg/bedrock:latest
-docker pull mozorg/bedrock_test:latest
-docker pull mozorg/bedrock_assets:latest
+# pull latest images from docker hub
+# needs to go above set_git_env_vars.sh
+GIT_COMMIT= docker-compose pull release app assets
 
 # get legal-docs
 git submodule sync
 git submodule update --init --recursive
+
+# set all of the GIT environment variables
+source docker/bin/set_git_env_vars.sh
 
 # build fresh based on local changes
 docker-compose build release
