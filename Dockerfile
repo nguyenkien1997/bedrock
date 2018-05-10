@@ -30,14 +30,10 @@ RUN apt-install gettext build-essential libxml2-dev libxslt1-dev libxslt1.1
 
 RUN virtualenv /venv
 
-COPY requirements/base.txt \
-     requirements/compiled.txt \
-     requirements/docker.txt \
-     requirements/prod.txt ./requirements/
+COPY requirements/base.txt requirements/prod.txt ./requirements/
 
 # Install Python deps
 RUN pip install --no-cache-dir -r requirements/prod.txt
-RUN pip install --no-cache-dir -r requirements/docker.txt
 
 
 ########
@@ -87,8 +83,8 @@ FROM app-base AS devapp
 
 CMD ["./bin/run-tests.sh"]
 
-COPY ./requirements ./requirements
-RUN pip install --no-cache-dir -r requirements/test.txt
+COPY requirements/base.txt requirements/dev.txt ./requirements/
+RUN pip install --no-cache-dir -r requirements/dev.txt
 COPY ./setup.cfg ./
 COPY ./tests ./tests
 
