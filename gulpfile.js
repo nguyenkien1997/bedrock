@@ -265,7 +265,7 @@ gulp.task('css:minify', ['css:compile'], () => {
  */
 gulp.task('js:minify', ['js:compile'], () => {
     return gulp.src(buildDir + '/js/**/*.js', {base: buildDir})
-        .pipe(uglify().on('error', handleError('UGLIFY')))
+        .pipe(uglify({ie8: true}).on('error', handleError('UGLIFY')))
         .pipe(gulp.dest(buildDir));
 });
 
