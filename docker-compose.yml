@@ -10,7 +10,7 @@ services:
       context: .
       target: assets
     image: mozorg/bedrock_assets:${GIT_COMMIT:-latest}
-    command: npm run docker-start
+    command: gulp watch
     ports:
       - "3000:3000"
       - "3001:3001"
@@ -72,7 +72,7 @@ services:
   release:
     build:
       context: .
-      target: webapp
+      target: release
       args:
         GIT_SHA: ${GIT_COMMIT:-latest}
         BRANCH_NAME: ${BRANCH_NAME:-latest}

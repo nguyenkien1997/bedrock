@@ -317,8 +317,8 @@ gulp.task('browser-sync', ['all:watch'], () => {
     return browserSync.init({
         proxy: proxyURL,
         open: openBrowser,
-        reloadDelay: 2000,
-        reloadDebounce: 2000,
+        reloadDelay: 300,
+        reloadDebounce: 500,
         injectChanges: false,
         serveStatic: [{
             route: '/media',
