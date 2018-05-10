@@ -26,9 +26,6 @@ services:
     build:
       context: .
       target: devapp
-      args:
-        GIT_SHA: ${GIT_COMMIT:-latest}
-        BRANCH_NAME: ${BRANCH_NAME:-latest}
     image: mozorg/bedrock_test:${GIT_COMMIT:-latest}
     command: python manage.py runserver 0.0.0.0:8000
     env_file: .env
