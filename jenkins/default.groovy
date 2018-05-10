@@ -12,7 +12,7 @@ stage ('Build Images') {
     utils.ircNotification([stage: 'Test & Deploy', status: 'starting'])
     lock ("bedrock-docker-${env.GIT_COMMIT}") {
         try {
-            sh "make build-ci"
+            sh "make clean build-ci"
         } catch(err) {
             utils.ircNotification([stage: 'Docker Build', status: 'failure'])
             throw err

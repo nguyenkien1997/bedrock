@@ -8,9 +8,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Python Tests
-          command: |
-            make build-ci
-            make test-ci
+          command: make clean test-ci
 
   test_js:
     docker:

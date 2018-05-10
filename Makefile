@@ -53,7 +53,7 @@ clean:
 	# static files
 	-rm -rf static_build/
 	# state files
-	-rm -f .docker-build
+	-rm -f .docker-build*
 
 lint: .docker-build
 	${DC} run test flake8 bedrock lib tests
@@ -69,10 +69,17 @@ docs: .docker-build
 	${DC} run app $(MAKE) -C docs/ clean
 	${DC} run app $(MAKE) -C docs/ html
 
-build-ci: clean
-	docker/bin/build_images.sh --ci
+#####
+# For use in CI
+#
+.docker-build-ci:
+	${MAKE} build-ci
 
-test-ci:
+build-ci: .env
+	docker/bin/build_images.sh --ci
+	touch .docker-build-ci
+
+test-ci: .docker-build-ci
 	${DC_CI} run test-image
 
 .PHONY: default clean build docs lint run shell test test-image test-smoketest restore-db rebuild build-ci test-ci
