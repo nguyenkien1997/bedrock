@@ -10,6 +10,7 @@ help:
 	@echo "build         - build docker images for dev"
 	@echo "run           - docker-compose up the entire system for dev"
 	@echo ""
+	@echo "pull          - pull the latest production images from Docker Hub"
 	@echo "shell         - start the Django Python shell (bpython and shell_plus)"
 	@echo "clean         - remove all build, test, coverage and Python artifacts"
 	@echo "rebuild       - force a rebuild of all of the docker images"
@@ -29,14 +30,25 @@ help:
 .docker-build:
 	${MAKE} build
 
-build: .env
-	docker/bin/build_images.sh
+.docker-build-pull:
+	${MAKE} pull
+
+build: .env .docker-build-pull submodules
+	${DC} build app assets
 	touch .docker-build
+
+pull:
+	-GIT_COMMIT= ${DC} pull release app assets builder app-base
+	touch .docker-build-pull
 
 rebuild: clean build
 
 run: .docker-build
 	${DC} up assets app
+
+submodules:
+	git submodule sync
+	git submodule update --init --recursive
 
 shell: .docker-build
 	${DC} run app python manage.py shell_plus
@@ -69,17 +81,19 @@ docs: .docker-build
 	${DC} run app $(MAKE) -C docs/ clean
 	${DC} run app $(MAKE) -C docs/ html
 
-#####
+###############
 # For use in CI
-#
+###############
 .docker-build-ci:
 	${MAKE} build-ci
 
-build-ci: .env
-	docker/bin/build_images.sh --ci
+build-ci: .env .docker-build-pull submodules
+	${DC_CI} build release
+	# tag intermediate images using cache
+	${DC_CI} build app assets builder app-base
 	touch .docker-build-ci
 
 test-ci: .docker-build-ci
 	${DC_CI} run test-image
 
-.PHONY: default clean build docs lint run shell test test-image test-smoketest restore-db rebuild build-ci test-ci
+.PHONY: default clean build pull submodules docs lint run shell test test-image rebuild build-ci test-ci

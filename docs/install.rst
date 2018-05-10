@@ -56,7 +56,7 @@ Then starting it all is simply::
 
     $ docker-compose up app assets
 
-All of the building is handled by the ``docker/bin/build_images.sh`` script and called by Make if you follow the above directions.
+All of the building is handled by the ``Makefile`` script and called by Make if you follow the above directions.
 You **DO NOT** need to do both.
 
 Local Installation
