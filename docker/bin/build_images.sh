@@ -13,7 +13,9 @@ git submodule update --init --recursive
 if [[ "$1" == "--ci" ]]; then
     # set all of the GIT environment variables
     source docker/bin/set_git_env_vars.sh
+    # build deployable container
     docker-compose build release
+    # tag intermediate images using cache
     docker-compose build app assets
 else
     docker-compose build app assets

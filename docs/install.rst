@@ -72,12 +72,12 @@ You need to create a virtual environment for Python libraries. Skip the first in
     $ virtualenv -p python2.7 venv                 # create a virtual env in the folder `venv`
     $ source venv/bin/activate                     # activate the virtual env. On Windows, run: venv\Scripts\activate.bat
     $ pip install -U pip                           # securely upgrade pip
-    $ pip install -r requirements/test.txt         # installs dependencies
+    $ pip install -r requirements/dev.txt         # installs dependencies
 
 If you are on OSX and some of the compiled dependencies fails to compile, try explicitly setting the arch flags and try again::
 
     $ export ARCHFLAGS="-arch i386 -arch x86_64"
-    $ pip install -r requirements/test.txt
+    $ pip install -r requirements/dev.txt
 
 If you are on Linux, you will need at least the following packages or their equivalent for your distro::
 
