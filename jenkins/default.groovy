@@ -17,6 +17,8 @@ stage ('Build Images') {
             utils.ircNotification([stage: 'Docker Build', status: 'failure'])
             throw err
         }
+        // save the files for later
+        stash 'workspace'
     }
 }
 

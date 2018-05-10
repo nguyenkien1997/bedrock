@@ -50,8 +50,6 @@ def loadBranch(String branch) {
 node {
     stage ('Prepare') {
         checkout scm
-        // save the files for later
-        stash 'workspace'
     }
     loadBranch(env.BRANCH_NAME)
 }
