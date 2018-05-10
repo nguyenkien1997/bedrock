@@ -74,3 +74,15 @@ services:
         GIT_SHA: ${GIT_COMMIT:-latest}
         BRANCH_NAME: ${BRANCH_NAME:-latest}
     image: mozorg/bedrock:${BRANCH_AND_COMMIT:-latest}
+
+  builder:
+    build:
+      context: .
+      target: python-builder
+    image: mozorg/bedrock_build:${GIT_COMMIT:-latest}
+
+  app-base:
+    build:
+      context: .
+      target: app-base
+    image: mozorg/bedrock_code:${GIT_COMMIT:-latest}

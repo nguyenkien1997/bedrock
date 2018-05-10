@@ -47,10 +47,9 @@ choice and modify things and you should see those changes reflected in your brow
 
 If you don't have or want to use Make you can call the docker and compose commands directly::
 
-    $ docker-compose pull release app assets
+    $ docker-compose pull app assets
     $ git submodule sync
     $ git submodule update --init --recursive
-    $ docker-compose build release
     $ docker-compose build app assets
 
 Then starting it all is simply::

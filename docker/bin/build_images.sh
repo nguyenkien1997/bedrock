@@ -4,7 +4,7 @@ set -exo pipefail
 
 # pull latest images from docker hub
 # needs to go above set_git_env_vars.sh
-GIT_COMMIT= docker-compose pull release app assets
+GIT_COMMIT= docker-compose pull release app assets builder app-base || true
 
 # get legal-docs
 git submodule sync
@@ -16,7 +16,7 @@ if [[ "$1" == "--ci" ]]; then
     # build deployable container
     docker-compose build release
     # tag intermediate images using cache
-    docker-compose build app assets
+    docker-compose build app assets builder app-base
 else
     docker-compose build app assets
 fi

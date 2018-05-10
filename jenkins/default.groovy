@@ -53,6 +53,8 @@ if ( config.push_public_registry != false ) {
             else {
                 utils.pushDockerhub('mozorg/bedrock_test')
                 utils.pushDockerhub('mozorg/bedrock_assets')
+                utils.pushDockerhub('mozorg/bedrock_code')
+                utils.pushDockerhub('mozorg/bedrock_build')
                 utils.pushDockerhub('mozorg/bedrock')
             }
         } catch(err) {
